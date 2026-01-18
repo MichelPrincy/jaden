@@ -191,7 +191,7 @@ class TikTokTaskBot:
             return
         
         await self.client.start()
-        self.client.remove_event_handler(self.)
+        self.client.remove_event_handler(self)
         self.client.add_event_handler(self., events.NewMessage(chats=TARGET_BOT))
         
         if not self.accounts:
