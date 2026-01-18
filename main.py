@@ -321,7 +321,7 @@ class TikTokTaskBot:
                  print(f"{RED}Compte {target} introuvable dans le menu bot.{RESET}", flush=True)
         
         # --- 5. COMPTE A RÉPARER ---
-        else:
+        elif "too" in text or "warnings" in text:
             if text and len(text.strip()) > 0:
                 print(f"{YELLOW}⚠️ Ce compte a besoin d'être réparé : {text}{RESET}", flush=True)
 
