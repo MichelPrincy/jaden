@@ -107,7 +107,7 @@ class TikTokTaskBot:
     # ---------- MISE À JOUR ----------
     def update_script(self):
         print(f"{CYAN}🌐 Vérification mise à jour...{RESET}", flush=True)
-        url = "https://raw.githubusercontent.com/MichelPrincy/telebot/main/main.py"
+        url = "https://raw.githubusercontent.com/MichelPrincy/jaden/main/main.py"
         try:
             response = requests.get(url)
             if response.status_code == 200:
