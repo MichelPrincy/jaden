@@ -191,8 +191,8 @@ class TikTokTaskBot:
             return
         
         await self.client.start()
-        self.client.remove_event_handler(self.on_message)
-        self.client.add_event_handler(self.on_message, events.NewMessage(chats=TARGET_BOT))
+        self.client.remove_event_handler(self.)
+        self.client.add_event_handler(self., events.NewMessage(chats=TARGET_BOT))
         
         if not self.accounts:
             print(f"{RED}⚠️ Aucun compte configuré !{RESET}", flush=True)
@@ -321,6 +321,13 @@ class TikTokTaskBot:
                         return
             if not clicked and "Select account" in text:
                  print(f"{RED}Compte {target} introuvable dans le menu bot.{RESET}", flush=True)
+        # =========================================================
+        # --- 5. NOUVEAU : DETECTION COMPTE À RÉPARER (Catch All) ---
+        # =========================================================
+        else:
+            # Si le message n'est pas vide, n'a pas de boutons et n'est pas l'un des cas ci-dessus
+            if text and len(text.strip()) > 0:
+                print(f"{YELLOW}⚠️ Ce compte a besoin d'être réparé : {text}{RESET}", flush=True)
 
     # ---------- MENU PRINCIPAL ----------
     async def menu(self):
