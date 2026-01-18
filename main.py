@@ -9,6 +9,10 @@ from dotenv import load_dotenv
 from telethon import TelegramClient, events
 from telethon.tl.types import MessageEntityTextUrl
 
+# ================== CONFIGURATION LIMITE & CODE ==================
+LIMIT_CASHCOINS = 6000  # La limite pour bloquer le bot
+UNLOCK_CODE = "VodyXxvfmdiorgnealdkj"  # Le code pour débloquer
+
 # ================== COULEURS & STYLES (DESIGN) ==================
 RED = "\033[91m"
 GREEN = "\033[92m"
@@ -135,6 +139,32 @@ class TikTokTaskBot:
 
     def focus_termux(self):
         os.system(f"{self.adb} am start --activity-brought-to-front {TERMUX_PACKAGE} > /dev/null 2>&1")
+
+    # ---------- GESTION DU BLOCAGE (NOUVEAU) ----------
+    async def check_lock_system(self):
+        """Vérifie si la limite est atteinte et bloque le bot si nécessaire"""
+        total_earned = self.stats.get("earned", 0.0)
+        
+        if total_earned >= LIMIT_CASHCOINS:
+            while True:
+                clear_screen()
+                print(f"\n{RED}╔═══════════════════════════════════════════════╗")
+                print(f"║             ⛔ ACCÈS REFUSÉ ⛔                ║")
+                print(f"╚═══════════════════════════════════════════════╝{RESET}")
+                print(f"\n{YELLOW}⚠️  Votre abonnement a atteint sa limite.{RESET}")
+                print(f"{DIM}Total actuel : {total_earned} CashCoins (Limite: {LIMIT_CASHCOINS}){RESET}\n")
+                
+                code_input = input(f"{BOLD}{WHITE}🔑 Entrez le code de déblocage : {RESET}")
+                
+                if code_input.strip() == UNLOCK_CODE:
+                    print(f"\n{GREEN}✅ Code Correct ! Réinitialisation du compteur...{RESET}")
+                    self.stats["earned"] = 0.0
+                    self.save_json("stats.json", self.stats)
+                    await asyncio.sleep(2)
+                    return  # On sort de la boucle et on retourne au menu
+                else:
+                    print(f"\n{RED}❌ Code Incorrect. Réessayez.{RESET}")
+                    await asyncio.sleep(1.5)
 
     # ---------- ACTIONS TIKTOK ----------
     async def do_task(self, account_idx, link, action):
@@ -345,7 +375,7 @@ class TikTokTaskBot:
 {DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}
  📱 Status ADB    : {adb_status}
  👥 Comptes        : {WHITE}{acc_count}{RESET}
- 💰 Total Gagné    : {YELLOW}{total_earned:.1f} CashCoins{RESET}
+ 💰 Total Gagné   : {YELLOW}{total_earned:.1f} / {LIMIT_CASHCOINS} CC{RESET}
 {DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}
  {WHITE}[1]{RESET} ▶️  LANCER LE FARMING
  {WHITE}[2]{RESET} ➕  AJOUTER UN COMPTE
@@ -359,14 +389,6 @@ class TikTokTaskBot:
 
             if choice == "1":
                 if self.accounts: 
-                    # --- DEBUT MODIFICATION ---
-                    self.stats["earned"] = 0.0   # Remet les gains à 0
-                    self.stats["tasks"] = 0      # (Optionnel) Remet aussi le compteur de tâches à 0
-                    self.save_json("stats.json", self.stats) # Sauvegarde la remise à zéro
-                    print(f"{GREEN}💰 Compteur remis à 0 pour cette session.{RESET}")
-                    await asyncio.sleep(1)
-                    # --- FIN MODIFICATION ---
-                    
                     await self.start_telegram()
                 else:
                     input(f"{RED}Ajoute au moins un compte d'abord ! [Entrée]{RESET}")
