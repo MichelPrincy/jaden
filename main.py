@@ -191,8 +191,10 @@ class TikTokTaskBot:
             return
         
         await self.client.start()
-        self.client.remove_event_handler(self.self.on_message)
-        self.client.add_event_handler(self., events.NewMessage(chats=TARGET_BOT))
+        # --- CORRECTION ICI ---
+        self.client.remove_event_handler(self.on_message)
+        self.client.add_event_handler(self.on_message, events.NewMessage(chats=TARGET_BOT))
+        # ----------------------
         
         if not self.accounts:
             print(f"{RED}⚠️ Aucun compte configuré !{RESET}", flush=True)
@@ -288,14 +290,10 @@ class TikTokTaskBot:
             await self.client.send_message(TARGET_BOT, "TikTok")
 
         # --- 3. PAS DE TASK ---
-        # --- 3. PAS DE TASK ---
         elif "Sorry" in text or "No more" in text:
             print(f"{RED}🚫 Pas de task sur ce compte.{RESET}", flush=True)
             
-            # --- MODIFICATION ICI ---
-            # On utilise la nouvelle logique pour sauter les comptes en pause
             self.get_next_active_index()
-            # ------------------------
 
             next_acc = self.accounts[self.index]
             
@@ -321,11 +319,9 @@ class TikTokTaskBot:
                         return
             if not clicked and "Select account" in text:
                  print(f"{RED}Compte {target} introuvable dans le menu bot.{RESET}", flush=True)
-        # =========================================================
-        # --- 5. NOUVEAU : DETECTION COMPTE À RÉPARER (Catch All) ---
-        # =========================================================
+        
+        # --- 5. COMPTE A RÉPARER ---
         else:
-            # Si le message n'est pas vide, n'a pas de boutons et n'est pas l'un des cas ci-dessus
             if text and len(text.strip()) > 0:
                 print(f"{YELLOW}⚠️ Ce compte a besoin d'être réparé : {text}{RESET}", flush=True)
 
@@ -348,8 +344,8 @@ class TikTokTaskBot:
 {WHITE}🤖 BOT AUTOMATION V3.1.2 {DIM}|{RESET} {CYAN}BY MICH{RESET}
 {DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}
  📱 Status ADB    : {adb_status}
- 👥 Comptes       : {WHITE}{acc_count}{RESET}
- 💰 Total Gagné   : {YELLOW}{total_earned:.1f} CashCoins{RESET}
+ 👥 Comptes        : {WHITE}{acc_count}{RESET}
+ 💰 Total Gagné    : {YELLOW}{total_earned:.1f} CashCoins{RESET}
 {DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}
  {WHITE}[1]{RESET} ▶️  LANCER LE FARMING
  {WHITE}[2]{RESET} ➕  AJOUTER UN COMPTE
@@ -386,7 +382,7 @@ class TikTokTaskBot:
                         await asyncio.sleep(0.5)
 
             elif choice == "3":
-                while True: # Petite boucle pour rester dans le menu gestion
+                while True: 
                     clear_screen()
                     print(f"{CYAN}=== 📋 GESTION DES COMPTES ==={RESET}", flush=True)
                     
