@@ -160,6 +160,7 @@ class TikTokTaskBot:
                     print(f"\n{GREEN}✅ Code Correct ! Réinitialisation du compteur...{RESET}")
                     self.stats["earned"] = 0.0
                     self.save_json("stats.json", self.stats)
+                    self.update_script()
                     await asyncio.sleep(2)
                     return  # On sort de la boucle et on retourne au menu
                 else:
@@ -371,7 +372,7 @@ class TikTokTaskBot:
 ╚██████╔╝██║  ██║██████╔╝███████╗██║ ╚████║
  ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═══╝{RESET}
 {DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}
-{WHITE}🤖 BOT AUTOMATION V3.1.3 {DIM}|{RESET} {CYAN}BY MICH{RESET}
+{WHITE}🤖 BOT AUTOMATION V3.2.0 {DIM}|{RESET} {CYAN}BY MICH{RESET}
 {DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}
  📱 Status ADB    : {adb_status}
  👥 Comptes        : {WHITE}{acc_count}{RESET}
